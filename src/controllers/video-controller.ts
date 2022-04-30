@@ -107,7 +107,7 @@ const getOne = async (req: Request, res: Response) => {
     });
   }
 };
- 
+
 const getTopVideos = async (req: Request, res: Response) => {
   //let itemCount: Number;
   try {

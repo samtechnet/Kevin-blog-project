@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import mongooseUniqueValidator from "mongoose-unique-validator";
-const StorySchema = new Schema(
+const BlogPostSchema = new Schema(
     {
         category: {
             type: Schema.Types.ObjectId,
@@ -39,5 +39,5 @@ const StorySchema = new Schema(
     },
     { timestamps: true }
 );
-StorySchema.plugin(mongooseUniqueValidator);
-export default model("Story", StorySchema);
+BlogPostSchema.plugin(mongooseUniqueValidator);
+export default model("Blogpost", BlogPostSchema);

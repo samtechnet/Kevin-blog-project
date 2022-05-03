@@ -50,7 +50,7 @@ const getOne = async (req: Request, res: Response) => {
   }
 };
 
-export default {
+export  {
   getAll,
   getOne,
 };

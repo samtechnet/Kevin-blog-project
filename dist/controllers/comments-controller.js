@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,57 +50,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var express_1 = __importDefault(require("express"));
-var dotenv_1 = __importDefault(require("dotenv"));
-var body_parser_1 = __importDefault(require("body-parser"));
-var cors_1 = __importDefault(require("cors"));
-var express_paginate_1 = __importDefault(require("express-paginate"));
-var passport_1 = __importDefault(require("passport"));
-var mongoose_1 = require("mongoose");
-var mongoose_2 = __importDefault(require("mongoose"));
-mongoose_2["default"].set("debug", true);
-mongoose_2["default"].Promise = global.Promise;
-dotenv_1["default"].config();
-var limit = Number(process.env.LIMIT);
-var max_limit = Number(process.env.MAX_LIMIT);
-var dbUrl = String(process.env.MONGO_DB);
-var PORT = process.env.PORT;
-var DB = process.env.MONGO_DB;
-var app = (0, express_1["default"])();
-app.use(body_parser_1["default"].json());
-app.use((0, cors_1["default"])());
-app.use(express_1["default"].urlencoded({ extended: false }));
-app.use(passport_1["default"].initialize());
-app.use(express_paginate_1["default"].middleware(limit, max_limit));
-app.get("/kevin", function (req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            res.send("This is server");
-            return [2 /*return*/];
-        });
-    });
-});
-var runApp = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+exports.removeOne = exports.addOne = void 0;
+var comment_1 = __importDefault(require("../models/comment"));
+var addOne = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var newRecord, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, mongoose_1.connect)(dbUrl)];
+                newRecord = new comment_1["default"](__assign(__assign({}, req.body), { createdBy: req.user.id }));
+                return [4 /*yield*/, newRecord.save()];
             case 1:
                 _a.sent();
-                console.log("successfully connected to database ".concat(DB));
-                app.listen(PORT, function () {
-                    console.log("Server started successfulyy on PORT ".concat(PORT));
-                });
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res.status(201).json({
+                        message: "Item successfully created",
+                        success: true
+                    })];
             case 2:
                 error_1 = _a.sent();
-                console.log(error_1);
-                runApp();
-                return [3 /*break*/, 3];
+                return [2 /*return*/, res.status(500).json({
+                        message: error_1.message,
+                        success: false
+                    })];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-runApp();
+exports.addOne = addOne;
+var removeOne = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var deleted, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, comment_1["default"].findByIdAndDelete(req.params.id)];
+            case 1:
+                deleted = _a.sent();
+                if (!deleted) {
+                    return [2 /*return*/, res.status(404).json({
+                            message: "Item not found",
+                            success: false
+                        })];
+                }
+                return [2 /*return*/, res.status(204).json({
+                        message: "Item successfully deleted",
+                        success: true
+                    })];
+            case 2:
+                error_2 = _a.sent();
+                return [2 /*return*/, res.status(500).json({
+                        message: error_2.message,
+                        success: false
+                    })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.removeOne = removeOne;

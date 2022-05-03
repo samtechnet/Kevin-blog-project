@@ -1,14 +1,15 @@
 {
   "name": "Kevin-blog-project",
   "version": "1.0.0",
-  "description": "A blog webApp for Everything youth project",
-  "main": "index.js",
+  "description": "A blog webApp for Everything Youth project",
+  "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.ts",
     "build": "npx tsc",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "gitty": "node git.js"
   },
   "keywords": [],
   "author": "",

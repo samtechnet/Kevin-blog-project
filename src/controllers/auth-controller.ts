@@ -53,7 +53,7 @@ const login = async (data: any, res: Response) => {
         success: false,
       });
     }
-    let isMatch = await bcrypt.compare(password, user.passord);
+    let isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       let token = Jwt.sign(
         {
@@ -226,7 +226,7 @@ const validateEmail = async (email: String) => {
   }
 };
 
-export default {
+export {
   login,
   register,
   verify,

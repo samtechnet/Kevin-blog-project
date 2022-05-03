@@ -40,56 +40,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var express_1 = __importDefault(require("express"));
-var dotenv_1 = __importDefault(require("dotenv"));
-var body_parser_1 = __importDefault(require("body-parser"));
-var cors_1 = __importDefault(require("cors"));
-var express_paginate_1 = __importDefault(require("express-paginate"));
-var passport_1 = __importDefault(require("passport"));
-var mongoose_1 = require("mongoose");
-var mongoose_2 = __importDefault(require("mongoose"));
-mongoose_2["default"].set("debug", true);
-mongoose_2["default"].Promise = global.Promise;
-dotenv_1["default"].config();
-var limit = Number(process.env.LIMIT);
-var max_limit = Number(process.env.MAX_LIMIT);
-var dbUrl = String(process.env.MONGO_DB);
-var PORT = process.env.PORT;
-var DB = process.env.MONGO_DB;
-var app = (0, express_1["default"])();
-app.use(body_parser_1["default"].json());
-app.use((0, cors_1["default"])());
-app.use(express_1["default"].urlencoded({ extended: false }));
-app.use(passport_1["default"].initialize());
-app.use(express_paginate_1["default"].middleware(limit, max_limit));
-app.get("/kevin", function (req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            res.send("This is server");
-            return [2 /*return*/];
-        });
+var auth_middleware_1 = require("../middleware/auth-middleware");
+var admin_controller_1 = require("../controllers/admin-controller");
+var auth_controller_1 = require("../controllers/auth-controller");
+var routes = express_1["default"].Router();
+routes.get("/users", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, admin_controller_1.getAll)(req, res)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
     });
-});
-var runApp = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+}); });
+routes.get("/users/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, admin_controller_1.getOne)(req, res)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
+routes.get("/seed", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var admin;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, mongoose_1.connect)(dbUrl)];
+                admin = {
+                    name: "Administrator",
+                    email: "samuel@samtechnet.com.ng",
+                    passworde: "password1234#"
+                };
+                return [4 /*yield*/, (0, auth_controller_1.register)(admin, "admin", res)];
             case 1:
                 _a.sent();
-                console.log("successfully connected to database ".concat(DB));
-                app.listen(PORT, function () {
-                    console.log("Server started successfulyy on PORT ".concat(PORT));
-                });
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                console.log(error_1);
-                runApp();
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
-}); };
-runApp();
+}); });
+exports["default"] = routes;

@@ -6,6 +6,7 @@ import paginate from "express-paginate";
 import passport from "passport";
 import { connect } from "mongoose";
 import mongoose from "mongoose";
+import routes from "./routes/index";
 import mongooseUniqueValidator from "mongoose-unique-validator";
 
 mongoose.set("debug", true);
@@ -16,10 +17,12 @@ dotenv.config();
 
 const limit = Number(process.env.LIMIT);
 const max_limit = Number(process.env.MAX_LIMIT);
-const dbUrl = String(process.env.MONGO_DB)
+const dbUrl = String(process.env.MONGO_DB);
+const PORT = process.env.PORT;
+const DB = process.env.MONGO_DB
 
 const app: express.Application = express();
-const PORT = process.env.PORT;
+
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -33,15 +36,10 @@ app.get("/kevin", async function (req: Request, res: Response) {
 
 const runApp = async () => {
     try {
-        await connect(dbUrl, {
-            //useFindAndModify: false,
-            //useUnifiedTopology: true,
-            //useNewUrlParser: true,
-            //useCreateIndex: true
-        });
-        console.log(`successfully connected to database ${process.env.MONGO_DB}`);
-        app.listen(process.env.PORT, () => {
-            console.log(`Server started successfulyy on PORT ${process.env.PORT}`);
+        await connect(dbUrl);
+        console.log(`successfully connected to database ${DB}`);
+        app.listen(PORT, () => {
+            console.log(`Server started successfulyy on PORT ${PORT}`);
         })
     } catch (error) {
         console.log(error)

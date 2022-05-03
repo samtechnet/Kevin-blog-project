@@ -39,57 +39,71 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var express_1 = __importDefault(require("express"));
-var dotenv_1 = __importDefault(require("dotenv"));
-var body_parser_1 = __importDefault(require("body-parser"));
-var cors_1 = __importDefault(require("cors"));
+exports.getOne = exports.getAll = void 0;
+var user_1 = __importDefault(require("../models/user"));
 var express_paginate_1 = __importDefault(require("express-paginate"));
-var passport_1 = __importDefault(require("passport"));
-var mongoose_1 = require("mongoose");
-var mongoose_2 = __importDefault(require("mongoose"));
-mongoose_2["default"].set("debug", true);
-mongoose_2["default"].Promise = global.Promise;
-dotenv_1["default"].config();
-var limit = Number(process.env.LIMIT);
-var max_limit = Number(process.env.MAX_LIMIT);
-var dbUrl = String(process.env.MONGO_DB);
-var PORT = process.env.PORT;
-var DB = process.env.MONGO_DB;
-var app = (0, express_1["default"])();
-app.use(body_parser_1["default"].json());
-app.use((0, cors_1["default"])());
-app.use(express_1["default"].urlencoded({ extended: false }));
-app.use(passport_1["default"].initialize());
-app.use(express_paginate_1["default"].middleware(limit, max_limit));
-app.get("/kevin", function (req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            res.send("This is server");
-            return [2 /*return*/];
-        });
-    });
-});
-var runApp = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+var getAll = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, results, itemCount, pageCount, error_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, mongoose_1.connect)(dbUrl)];
+                _b.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Promise.all([
+                        user_1["default"].find({})
+                            .sort({ createdAt: -1 })
+                            .limit(req.query.limit)
+                            .skip(req.skip)
+                            .lean()
+                            .exec(),
+                        user_1["default"].count({}),
+                    ])];
             case 1:
-                _a.sent();
-                console.log("successfully connected to database ".concat(DB));
-                app.listen(PORT, function () {
-                    console.log("Server started successfulyy on PORT ".concat(PORT));
-                });
-                return [3 /*break*/, 3];
+                _a = _b.sent(), results = _a[0], itemCount = _a[1];
+                pageCount = Math.ceil(itemCount / req.query.limit);
+                return [2 /*return*/, res.status(201).json({
+                        object: "List",
+                        has_more: express_paginate_1["default"].hasNextPages(req)(pageCount),
+                        data: results,
+                        pageCount: pageCount,
+                        itemCount: itemCount,
+                        currentPage: req.query.page,
+                        pages: express_paginate_1["default"].getArrayPages(req)(3, pageCount, req.query.page)
+                    })];
             case 2:
-                error_1 = _a.sent();
-                console.log(error_1);
-                runApp();
-                return [3 /*break*/, 3];
+                error_1 = _b.sent();
+                return [2 /*return*/, res.status(500).json({
+                        message: error_1.message,
+                        success: false
+                    })];
             case 3: return [2 /*return*/];
         }
     });
 }); };
-runApp();
+exports.getAll = getAll;
+var getOne = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var item, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, user_1["default"].findById(req.params.id)];
+            case 1:
+                item = _a.sent();
+                if (item) {
+                    return [2 /*return*/, res.status(200).json(item)];
+                }
+                return [2 /*return*/, res.status(404).json({
+                        message: "Item not found",
+                        success: false
+                    })];
+            case 2:
+                error_2 = _a.sent();
+                return [2 /*return*/, res.status(500).json({
+                        message: error_2.message,
+                        success: false
+                    })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getOne = getOne;

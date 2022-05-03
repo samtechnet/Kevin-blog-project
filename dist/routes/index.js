@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+exports.__esModule = true;
+var express_1 = __importDefault(require("express"));
+var auth_routes_1 = __importDefault(require("./auth-routes"));
+var admin_routes_1 = __importDefault(require("./admin-routes"));
+var category_routes_1 = __importDefault(require("./category-routes"));
+var comments_routes_1 = __importDefault(require("./comments-routes"));
+var profile_routes_1 = __importDefault(require("./profile-routes"));
+var blogpost_routes_1 = __importDefault(require("./blogpost-routes"));
+var videos_routes_1 = __importDefault(require("./videos-routes"));
+var routes = express_1["default"].Router();
+routes.use("auth", auth_routes_1["default"]);
+routes.use("api", admin_routes_1["default"]);
+routes.use("api", category_routes_1["default"]);
+routes.use("api", comments_routes_1["default"]);
+routes.use("api", profile_routes_1["default"]);
+routes.use("api", blogpost_routes_1["default"]);
+routes.use("api", videos_routes_1["default"]);
+exports["default"] = routes;

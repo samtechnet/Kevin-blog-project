@@ -4,7 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 
 const ensureAuthenticated = passport.authenticate("jwt", { session: false });
 
-const ensureAuthorized = (roles: string | any[]) => (req: Request, res: Response, next: NextFunction) => {
+const ensureAuthorized = (roles: string | any[]) => (req: express.Request, res: Response, next: NextFunction) => {
     if (roles.includes(req.user.roles)) {
         return next();
     }
@@ -14,6 +14,6 @@ const ensureAuthorized = (roles: string | any[]) => (req: Request, res: Response
     })
 };
 
-export default {
+export  {
      ensureAuthenticated, ensureAuthorized
  }

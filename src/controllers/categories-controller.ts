@@ -105,7 +105,7 @@ const getOne = async (req: Request, res: Response) => {
   }
 };
 
-export default {
+export {
   addOne,
   removeOne,
   updateOne,

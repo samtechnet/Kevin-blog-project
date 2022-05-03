@@ -34,7 +34,7 @@ const getOne = async (req: Request, res: Response) => {
   }
 };
 
-export default {
+export {
   updateOne,
   getOne,
 };

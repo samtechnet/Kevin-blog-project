@@ -19,7 +19,7 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
 
     if (!errors.not().isEmpty()) {
         return next;
-    }
+    };
 
     const resultErrors = [];
     errors.array().map((err) => resultErrors.push({ [err.params]: err.mss }));

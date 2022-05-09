@@ -29,7 +29,7 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
 
     const errorObject = Object.assign({}, ...resultErrors)
     return res.status(422).json(errorObject);
-}
+};
 
 
 export {validationRules, validate}

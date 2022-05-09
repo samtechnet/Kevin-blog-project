@@ -9,7 +9,7 @@
     "build": "npx tsc",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "tsc": "tsc",
-    "gitty": "node git.js"
+    "gitty": "bash gitfile.sh $1"
   },
   "keywords": [],
   "author": "",

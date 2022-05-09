@@ -134,11 +134,17 @@ var updateOne = function (req, res) { return __awaiter(void 0, void 0, void 0, f
 }); };
 exports.updateOne = updateOne;
 var getAll = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, results, itemCount, pageCount, error_4;
+    var limit, _a, results, itemCount, pageCount, error_4;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
+                limit = 10;
+                if (req.params.limit) {
+                    limit = parseFloat(req.params.limit);
+                }
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, Promise.all([
                         blogpost_1["default"].find({})
                             .populate("category", "title")
@@ -149,9 +155,9 @@ var getAll = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                             .exec(),
                         blogpost_1["default"].count({}),
                     ])];
-            case 1:
+            case 2:
                 _a = _b.sent(), results = _a[0], itemCount = _a[1];
-                pageCount = Math.ceil(itemCount / req.query.limit);
+                pageCount = Math.ceil(itemCount / limit);
                 return [2 /*return*/, res.status(201).json({
                         object: "List",
                         has_more: express_paginate_1["default"].hasNextPages(req)(pageCount),
@@ -161,13 +167,13 @@ var getAll = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                         currentPage: req.query.page,
                         pages: express_paginate_1["default"].getArrayPages(req)(3, pageCount, req.query.page)
                     })];
-            case 2:
+            case 3:
                 error_4 = _b.sent();
                 return [2 /*return*/, res.status(500).json({
                         message: error_4.message,
                         success: false
                     })];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

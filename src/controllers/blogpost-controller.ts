@@ -44,6 +44,7 @@ const removeOne = async (req: Request, res: Response) => {
 };
 
 const updateOne = async (req: Request, res: Response) => {
+    
   try {
     await Blogpost.findByIdAndUpdate(req.params.id, req.body);
     return res.status(201).json({
@@ -60,18 +61,22 @@ const updateOne = async (req: Request, res: Response) => {
 
 const getAll = async (req: Request, res: Response) => {
   //let itemCount: Number;
+  let limit: number = 10
+  if (req.params.limit){
+    limit = parseFloat(req.params.limit);
+  }
   try {
     const [results, itemCount] = await Promise.all([
       Blogpost.find({})
         .populate("category", "title")
         .sort({ createdAt: -1 })
-        .limit(req.query.limit)
-        .skip(req.skip)
+        .limit(req.query.limit as unknown as number)
+        .skip(req.skip as number)
         .lean()
         .exec(),
       Blogpost.count({}),
     ]);
-    const pageCount = Math.ceil(itemCount / req.query.limit);
+    const pageCount= Math.ceil(itemCount / limit);
     return res.status(201).json({
       object: "List",
       has_more: paginate.hasNextPages(req)(pageCount),
@@ -79,7 +84,7 @@ const getAll = async (req: Request, res: Response) => {
       pageCount,
       itemCount,
       currentPage: req.query.page,
-      pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+      pages: paginate.getArrayPages(req)(3, pageCount, req.query.page as unknown as number),
     });
   } catch (error: any) {
     return res.status(500).json({

@@ -27,9 +27,11 @@ const app: express.Application = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(passport.initialize());
+require("./middleware/passport-middleware.ts")(passport)
 app.use(paginate.middleware(limit, max_limit));
-
+app.use(routes);
 app.get("/kevin", async function (req: Request, res: Response) {
     res.send("This is server")
 });

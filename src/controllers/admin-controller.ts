@@ -4,17 +4,29 @@ import express, { Request, Response } from "express";
 
 const getAll = async (req: Request, res: Response) => {
   //let itemCount: Number;
+  
+  let limit: number = 10
+  if (req.params.limit){
+    limit = parseFloat(req.params.limit);
+  }
+  let skip: unknown
+  if (req.params.skip) {
+    skip = (req.params.limit)
+  }
+  
+  //const skip:String = (req.params.skip)
   try {
     const [results, itemCount] = await Promise.all([
       User.find({})
         .sort({ createdAt: -1 })
-        .limit(req.query.limit)
-        .skip(req.skip)
+        .limit(limit)
+
+        .skip(skip as number)
         .lean()
         .exec(),
       User.count({}),
     ]);
-    const pageCount = Math.ceil(itemCount / req.query.limit);
+    const pageCount = Math.ceil(itemCount / limit);
     return res.status(201).json({
       object: "List",
       has_more: paginate.hasNextPages(req)(pageCount),
@@ -22,7 +34,7 @@ const getAll = async (req: Request, res: Response) => {
       pageCount,
       itemCount,
       currentPage: req.query.page,
-      pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
+      pages: paginate.getArrayPages(req)(3, pageCount, req.params.page as unknown as number),
     });
   } catch (error: any) {
     return res.status(500).json({

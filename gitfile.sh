@@ -7,4 +7,4 @@ echo "I'm adding all file here"
 git commit -m $1
 echo "last line of script"
 git push
-echo "Done"
+echo "                         Done"

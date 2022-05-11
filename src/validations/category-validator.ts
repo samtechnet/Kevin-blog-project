@@ -1,28 +1,27 @@
 import { check, validationResult } from "express-validator";
 import express, { NextFunction, Request, Response } from "express";
 
-const validationRules = (req: Request) => {
+const validationRules = () => {
     return [
         check("title")
-        
             .trim()
-            .not()
+            .notEmpty().withMessage('Title can not be empty')
             .isLength({ min: 2, max: 56 })
             .withMessage
             ("Title must be between 2 and 56 characters")
-            .isEmpty()
+            
     ]
 };
 
 const validate = (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationRules(req);
+    const errors = validationResult(req);
 
-    if (!errors.not().isEmpty()) {
+    if (!errors.isEmpty()) {
         return next;
     };
 
     const resultErrors = [];
-    errors.array().map((err) => resultErrors.push({ [err.params]: err.mss }));
+    errors.array().map((err) => resultErrors.push({ [err.param]: err.msg }));
 
     resultErrors.push({ message: "Action unsuccessful" });
     resultErrors.push({ success: false });

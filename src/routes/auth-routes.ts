@@ -1,4 +1,5 @@
-import express, { Router } from "express";
+//import express, { Router } from "express";
+import express, {Router, Request, Response } from "express";
 import { ensureAuthenticated } from "../middleware/auth-middleware";
 import { login,
     register,
@@ -7,12 +8,15 @@ import { login,
     resetPassword,
     changePassword,} from "../controllers/auth-controller";
 const routes = express.Router();
+import { validationRules, validate } from "../validations/user-validator";
+//import { validationRules : passwordValidationRules, validate: passwordValidate } from "../validations/change-password-validator";
+
 
 routes.post("/login",async (req, res) => {
     await login(req.body, res);
 });
 
-routes.post("/register",async (req, res) => {
+routes.post("/register", validationRules(), validate, async (req: Request, res: Response) => {
     await register(req.body, "user", res);
 });
 

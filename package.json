@@ -9,7 +9,8 @@
     "build": "npx tsc",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "tsc": "tsc",
-    "gitty": "bash gitfile.sh $1"
+    "gitty": "bash gitfile.sh read -p 'Enter your commit message: 'COMMIT",
+    "start-gendoc": "node swagger.ts"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +31,6 @@
     "nodemailer": "^6.7.3",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
-    "swagger-autogen": "^2.21.1",
     "swagger-ui-express": "^4.3.0",
     "ts-node": "^10.7.0",
     "tsc-watch": "^5.0.3",
@@ -52,6 +52,7 @@
     "@types/passport-jwt": "^3.0.6",
     "@types/swagger-ui-express": "^4.1.3",
     "@types/typescript": "^2.0.0",
-    "express-paginate": "^1.0.2"
+    "express-paginate": "^1.0.2",
+    "swagger-autogen": "^2.21.1"
   }
 }

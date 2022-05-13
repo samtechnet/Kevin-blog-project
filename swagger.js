@@ -1,5 +1,8 @@
-//@ts-ignore
-import swaggerAutogen from 'swagger-autogen';
+import swaggerAutogen  from 'swagger-autogen';
+//import swaggerJsdoc from "swagger-jsdoc";
+//const swaggerAutogen = require("swagger-autogen")();
+
+
 
 const doc = {
     info: {
@@ -39,7 +42,7 @@ const doc = {
             scheme: "bearer"
         }
     },
-    definition: {
+    definitions: {
         LoginModel: {
             $email: "samlaja1292@gmail.com",
             $password: "Password123#",
@@ -84,12 +87,11 @@ const doc = {
             $newPassword: "Password789#"
         },
     },
-
 };
 
 const outputFile = "./swagger_output.json";
-const endpointFiles = ["./routes/index.ts"];
+const endpointFiles = ["./src/routes/index.ts"];
 
-swaggerAutogen(outputFile, endpointFiles, doc).then(() => {
-    require("./index")
+swaggerAutogen()(outputFile, endpointFiles, doc).then(async() => {
+    await import("./src/server.ts")
 })

@@ -1,14 +1,18 @@
 import Blogpost from "../models/blogpost";
 import paginate from "express-paginate";
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
 import Comment from "../models/comment";
 
 const addOne = async (req: Request, res: Response) => {
+  const newRecord = new Blogpost({
+    ...req.body,
+    createdBy: req.user.id,
+  }); 
   try {
-    const newRecord = new Blogpost({
-      ...req.body,
-      createdBy: req.user.id,
-    });
+    
+    if(!newRecord.slug) {
+      newRecord.slug = generateSlug(newRecord.title);
+  }
     await newRecord.save();
     return res.status(201).json({
       message: "Item successfully created",
@@ -156,6 +160,19 @@ const getTopStories = async (req: Request, res: Response) => {
     });
   }
 };
+
+const generateSlug = (title: { toString: () => string; }) => {
+  const slugText = title.toString()
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+  .replace(/[^\w\-]+/g, "")
+  .replace(/\-\-+/g, "-")
+  .replace(/^-+/, "")
+  .replace(/-+$/, "");
+
+  return slugText;
+}
 
 export {
   addOne,

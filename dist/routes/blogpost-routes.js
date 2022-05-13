@@ -42,12 +42,32 @@ exports.__esModule = true;
 var express_1 = __importDefault(require("express"));
 var auth_middleware_1 = require("../middleware/auth-middleware");
 var blogpost_controller_1 = require("../controllers/blogpost-controller");
+var path_1 = __importDefault(require("path"));
+var blogpost_validator_1 = require("../validations/blogpost-validator");
+var multer_1 = __importDefault(require("multer"));
 var routes = express_1["default"].Router();
+var PATH = "../public/";
+var storage = multer_1["default"].diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path_1["default"].join(__dirname, PATH));
+    },
+    filename: function (req, file, cb) {
+        var fileName = Date.now() + path_1["default"].extname(file.originalname);
+        req.body.imageUrl = fileName;
+        cb(null, fileName);
+    }
+});
+var upload = (0, multer_1["default"])({
+    storage: storage
+});
 routes.get("/stories", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, blogpost_controller_1.getAll)(req, res)];
+            case 0: 
+            // #swagger.tags = ['Posts']
+            return [4 /*yield*/, (0, blogpost_controller_1.getAll)(req, res)];
             case 1:
+                // #swagger.tags = ['Posts']
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -56,28 +76,108 @@ routes.get("/stories", function (req, res) { return __awaiter(void 0, void 0, vo
 routes.get("/stories/top", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, blogpost_controller_1.getTopStories)(req, res)];
+            case 0: 
+            // #swagger.tags = ['Posts']
+            return [4 /*yield*/, (0, blogpost_controller_1.getTopStories)(req, res)];
             case 1:
+                // #swagger.tags = ['Posts']
                 _a.sent();
                 return [2 /*return*/];
         }
     });
 }); });
-routes.post("/stories", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+routes.post("/stories", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), upload.any("files"));
+routes.post("/stories", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), (0, blogpost_validator_1.validationRules)(), blogpost_validator_1.validate, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, blogpost_controller_1.addOne)(req, res)];
+            case 0: 
+            /*  #swagger.tags = ['Posts']
+                #swagger.consumes = ['multipart/form-data']
+                #swagger.security = [{
+                "Authorization": []
+                }]
+                #swagger.parameters['file'] = {
+                    in: 'formData',
+                    required: true,
+                    type: 'file'
+                }
+              
+                #swagger.parameters['category'] = {
+                    in: 'formData',
+                    required: true,
+                    type: 'string',
+              }
+              #swagger.parameters['title'] = {
+                    in: 'formData',
+                    required: true,
+                    type: 'string',
+              }
+              #swagger.parameters['body'] = {
+                    in: 'formData',
+                    required: true,
+                    type: 'string',
+              }
+            
+            */
+            return [4 /*yield*/, (0, blogpost_controller_1.addOne)(req, res)];
             case 1:
+                /*  #swagger.tags = ['Posts']
+                    #swagger.consumes = ['multipart/form-data']
+                    #swagger.security = [{
+                    "Authorization": []
+                    }]
+                    #swagger.parameters['file'] = {
+                        in: 'formData',
+                        required: true,
+                        type: 'file'
+                    }
+                  
+                    #swagger.parameters['category'] = {
+                        in: 'formData',
+                        required: true,
+                        type: 'string',
+                  }
+                  #swagger.parameters['title'] = {
+                        in: 'formData',
+                        required: true,
+                        type: 'string',
+                  }
+                  #swagger.parameters['body'] = {
+                        in: 'formData',
+                        required: true,
+                        type: 'string',
+                  }
+                
+                */
                 _a.sent();
                 return [2 /*return*/];
         }
     });
 }); });
-routes.put("/stories/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+routes.put("/stories/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), (0, blogpost_validator_1.validationRules)(), blogpost_validator_1.validate, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, blogpost_controller_1.updateOne)(req, res)];
+            case 0: 
+            /*  #swagger.tags = ['Posts']
+                #swagger.security = [{
+                "Authorization": []
+                }]
+                #swagger.parameters['obj'] = {
+                    in: 'body',
+                    required: true,
+                    schema: { $ref: "#/definitions/StoryModel" }
+            } */
+            return [4 /*yield*/, (0, blogpost_controller_1.updateOne)(req, res)];
             case 1:
+                /*  #swagger.tags = ['Posts']
+                    #swagger.security = [{
+                    "Authorization": []
+                    }]
+                    #swagger.parameters['obj'] = {
+                        in: 'body',
+                        required: true,
+                        schema: { $ref: "#/definitions/StoryModel" }
+                } */
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -86,8 +186,11 @@ routes.put("/stories/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middl
 routes.get("/stories/slug/:slug", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, blogpost_controller_1.getOneBySlug)(req, res)];
+            case 0: 
+            // #swagger.tags = ['Posts']
+            return [4 /*yield*/, (0, blogpost_controller_1.getOneBySlug)(req, res)];
             case 1:
+                // #swagger.tags = ['Posts']
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -96,8 +199,19 @@ routes.get("/stories/slug/:slug", function (req, res) { return __awaiter(void 0,
 routes["delete"]("/stories/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, blogpost_controller_1.removeOne)(req, res)];
+            case 0: 
+            /*  #swagger.tags = ['Posts']
+                #swagger.security = [{
+                "Authorization": []
+                }]
+            */
+            return [4 /*yield*/, (0, blogpost_controller_1.removeOne)(req, res)];
             case 1:
+                /*  #swagger.tags = ['Posts']
+                    #swagger.security = [{
+                    "Authorization": []
+                    }]
+                */
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -106,8 +220,11 @@ routes["delete"]("/stories/:id", auth_middleware_1.ensureAuthenticated, (0, auth
 routes.get("/stories/:id", auth_middleware_1.ensureAuthenticated, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, blogpost_controller_1.getOne)(req, res)];
+            case 0: 
+            // #swagger.tags = ['Posts']
+            return [4 /*yield*/, (0, blogpost_controller_1.getOne)(req, res)];
             case 1:
+                // #swagger.tags = ['Posts']
                 _a.sent();
                 return [2 /*return*/];
         }

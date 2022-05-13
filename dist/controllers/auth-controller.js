@@ -281,7 +281,7 @@ var resetPassword = function (data, res) { return __awaiter(void 0, void 0, void
     });
 }); };
 exports.resetPassword = resetPassword;
-var changePassword = function (data, req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var changePassword = function (data, res, req) { return __awaiter(void 0, void 0, void 0, function () {
     var oldPassword, newPassword, user, isMatch, hashedPassword, error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {

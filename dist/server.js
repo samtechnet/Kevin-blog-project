@@ -48,6 +48,8 @@ var passport_1 = __importDefault(require("passport"));
 var mongoose_1 = require("mongoose");
 var mongoose_2 = __importDefault(require("mongoose"));
 var index_1 = __importDefault(require("./routes/index"));
+var swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+var swagger_output_json_1 = __importDefault(require("./swagger_output.json"));
 mongoose_2["default"].set("debug", true);
 mongoose_2["default"].Promise = global.Promise;
 dotenv_1["default"].config();
@@ -65,6 +67,7 @@ app.use(passport_1["default"].initialize());
 require("./middleware/passport-middleware.ts")(passport_1["default"]);
 app.use(express_paginate_1["default"].middleware(limit, max_limit));
 app.use(index_1["default"]);
+app.use("/doc", swagger_ui_express_1["default"].serve, swagger_ui_express_1["default"].setup(swagger_output_json_1["default"]));
 app.get("/kevin", function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

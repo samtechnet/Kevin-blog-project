@@ -59,22 +59,27 @@ var addOne = function (req, res) { return __awaiter(void 0, void 0, void 0, func
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
                 newRecord = new blogpost_1["default"](__assign(__assign({}, req.body), { createdBy: req.user.id }));
-                return [4 /*yield*/, newRecord.save()];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                if (!newRecord.slug) {
+                    newRecord.slug = generateSlug(newRecord.title);
+                }
+                return [4 /*yield*/, newRecord.save()];
+            case 2:
                 _a.sent();
                 return [2 /*return*/, res.status(201).json({
                         message: "Item successfully created",
                         success: true
                     })];
-            case 2:
+            case 3:
                 error_1 = _a.sent();
                 return [2 /*return*/, res.status(500).json({
                         message: error_1.message,
                         success: false
                     })];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -270,3 +275,14 @@ var getTopStories = function (req, res) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.getTopStories = getTopStories;
+var generateSlug = function (title) {
+    var slugText = title.toString()
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+        .replace(/^-+/, "")
+        .replace(/-+$/, "");
+    return slugText;
+};

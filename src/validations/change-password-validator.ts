@@ -1,7 +1,7 @@
 import { check, validationResult } from "express-validator";
 import express, { NextFunction, Request, Response } from "express";
 
-const validationRules = () => {
+const changePasswordValidationRules = () => {
     return [
         check("newPassword")
             .trim()
@@ -13,11 +13,11 @@ const validationRules = () => {
     ]
 };
 
-const validate = (req: Request, res: Response, next: NextFunction) => {
+const changePasswordValidate = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-        return next;
+    if (errors.isEmpty()) {
+        return next();
     };
 
     const resultErrors = [];
@@ -31,4 +31,4 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
 };
 
 
-export {validationRules, validate}
+export {changePasswordValidationRules, changePasswordValidate}

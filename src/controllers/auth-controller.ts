@@ -3,6 +3,10 @@ import Jwt from "jsonwebtoken";
 import User from "../models/user";
 import express, { Request, Response } from "express";
 import crypto from "node:crypto";
+import {
+  welcomeSender,
+  forgotPasswordSender
+} from "../mailers/senders";
 
 const saltRounds = Number(process.env.SALT_ROUNDS);
 const pepper = String(process.env.BCRYPT_PASSWORD);
@@ -30,6 +34,7 @@ const register = async (data: any, role: any, res: Response) => {
       role,
     });
     await newUser.save();
+    welcomeSender(newUser.email, newUser.name, newUser.verificationCode)
     return res.status(201).json({
       message: "Account successfully created",
       sucess: true,
@@ -138,6 +143,7 @@ const forgotPassword = async (data: any, res: Response) => {
     const code = crypto.randomInt(100000, 1000000);
     const passwordResetCode = await bcrypt.hash(code.toString(), saltRounds);
     await user.update({ passwordResetCode: passwordResetCode });
+    forgotPasswordSender(user.email, user.name, code);
     return res.status(404).json({
       message: "Verification code sent to your email",
       success: true,
@@ -188,7 +194,7 @@ const resetPassword = async (data: any, res: Response) => {
   }
 };
 
-const changePassword = async (data: any, req: Request, res: Response) => {
+const changePassword = async (data: any, res: Response, req: Request) => {
   try {
     let { oldPassword, newPassword } = data;
     const user = await User.findById(req.user._id);

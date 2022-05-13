@@ -8,6 +8,8 @@ import { connect } from "mongoose";
 import mongoose from "mongoose";
 import routes from "./routes/index";
 import mongooseUniqueValidator from "mongoose-unique-validator";
+import swaggerUi from "swagger-ui-express";
+import swaggerFile from "./swagger_output.json";
 
 mongoose.set("debug", true);
 mongoose.Promise = global.Promise;
@@ -32,6 +34,7 @@ app.use(passport.initialize());
 require("./middleware/passport-middleware.ts")(passport)
 app.use(paginate.middleware(limit, max_limit));
 app.use(routes);
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.get("/kevin", async function (req: Request, res: Response) {
     res.send("This is server")
 });

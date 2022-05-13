@@ -47,8 +47,21 @@ var routes = express_1["default"].Router();
 routes.get("/users", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, admin_controller_1.getAll)(req, res)];
+            case 0: 
+            /*
+                #swagger.tags = ['Admin]
+                #swagger.security = [{
+                    "Authorization": []
+                }]
+            */
+            return [4 /*yield*/, (0, admin_controller_1.getAll)(req, res)];
             case 1:
+                /*
+                    #swagger.tags = ['Admin]
+                    #swagger.security = [{
+                        "Authorization": []
+                    }]
+                */
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -57,8 +70,21 @@ routes.get("/users", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_
 routes.get("/users/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, admin_controller_1.getOne)(req, res)];
+            case 0: 
+            /*
+                  #swagger.tags = ['Admin]
+                  #swagger.security = [{
+                      "Authorization": []
+                  }]
+              */
+            return [4 /*yield*/, (0, admin_controller_1.getOne)(req, res)];
             case 1:
+                /*
+                      #swagger.tags = ['Admin]
+                      #swagger.security = [{
+                          "Authorization": []
+                      }]
+                  */
                 _a.sent();
                 return [2 /*return*/];
         }

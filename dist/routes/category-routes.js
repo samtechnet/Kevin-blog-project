@@ -42,32 +42,74 @@ exports.__esModule = true;
 var express_1 = __importDefault(require("express"));
 var auth_middleware_1 = require("../middleware/auth-middleware");
 var categories_controller_1 = require("../controllers/categories-controller");
+var category_validator_1 = require("../validations/category-validator");
 var routes = express_1["default"].Router();
 routes.get("/categories", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, categories_controller_1.getAll)(req, res)];
+            case 0: 
+            // #swagger.tags = ['Posts']    
+            return [4 /*yield*/, (0, categories_controller_1.getAll)(req, res)];
             case 1:
+                // #swagger.tags = ['Posts']    
                 _a.sent();
                 return [2 /*return*/];
         }
     });
 }); });
-routes.post("/categories", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+routes.post("/categories", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), (0, category_validator_1.validationRules)(), category_validator_1.validate, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, categories_controller_1.addOne)(req, res)];
+            case 0: 
+            /*  #swagger.tags = ['Posts']
+              #swagger.security = [{
+              "Authorization": []
+              }]
+              #swagger.parameters['obj'] = {
+                  in: 'body',
+                  required: true,
+                  schema: { $ref: "#/definitions/CategoryModel" }
+          } */
+            return [4 /*yield*/, (0, categories_controller_1.addOne)(req, res)];
             case 1:
+                /*  #swagger.tags = ['Posts']
+                  #swagger.security = [{
+                  "Authorization": []
+                  }]
+                  #swagger.parameters['obj'] = {
+                      in: 'body',
+                      required: true,
+                      schema: { $ref: "#/definitions/CategoryModel" }
+              } */
                 _a.sent();
                 return [2 /*return*/];
         }
     });
 }); });
-routes.put("/categories/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+routes.put("/categories/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), (0, category_validator_1.validationRules)(), category_validator_1.validate, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, categories_controller_1.updateOne)(req, res)];
+            case 0: 
+            /*  #swagger.tags = ['Posts']
+                #swagger.security = [{
+                "Authorization": []
+                }]
+                #swagger.parameters['obj'] = {
+                    in: 'body',
+                    required: true,
+                    schema: { $ref: "#/definitions/CategoryModel" }
+            } */
+            return [4 /*yield*/, (0, categories_controller_1.updateOne)(req, res)];
             case 1:
+                /*  #swagger.tags = ['Posts']
+                    #swagger.security = [{
+                    "Authorization": []
+                    }]
+                    #swagger.parameters['obj'] = {
+                        in: 'body',
+                        required: true,
+                        schema: { $ref: "#/definitions/CategoryModel" }
+                } */
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -76,8 +118,11 @@ routes.put("/categories/:id", auth_middleware_1.ensureAuthenticated, (0, auth_mi
 routes.get("/categories/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, categories_controller_1.getOne)(req, res)];
+            case 0: 
+            // #swagger.tags = ['Posts'] 
+            return [4 /*yield*/, (0, categories_controller_1.getOne)(req, res)];
             case 1:
+                // #swagger.tags = ['Posts'] 
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -86,8 +131,19 @@ routes.get("/categories/:id", function (req, res) { return __awaiter(void 0, voi
 routes["delete"]("/categories/:id", auth_middleware_1.ensureAuthenticated, (0, auth_middleware_1.ensureAuthorized)(["admin"]), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, categories_controller_1.removeOne)(req, res)];
+            case 0: 
+            /*  #swagger.tags = ['Posts']
+                #swagger.security = [{
+                "Authorization": []
+                }]
+            */
+            return [4 /*yield*/, (0, categories_controller_1.removeOne)(req, res)];
             case 1:
+                /*  #swagger.tags = ['Posts']
+                    #swagger.security = [{
+                    "Authorization": []
+                    }]
+                */
                 _a.sent();
                 return [2 /*return*/];
         }

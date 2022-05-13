@@ -39,25 +39,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
+//import express, { Router } from "express";
 var express_1 = __importDefault(require("express"));
 var auth_middleware_1 = require("../middleware/auth-middleware");
 var auth_controller_1 = require("../controllers/auth-controller");
 var routes = express_1["default"].Router();
+var user_validator_1 = require("../validations/user-validator");
 routes.post("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, auth_controller_1.login)(req.body, res)];
+            case 0: 
+            /*
+                  #swagger.tags = ['Auth]
+                  #swagger.parameters['obj'] = {
+                      in: 'body',
+                      required: true,
+                      scheme: {$ref: '#/definition/LoginModel'}
+                  }
+              */
+            return [4 /*yield*/, (0, auth_controller_1.login)(req.body, res)];
             case 1:
+                /*
+                      #swagger.tags = ['Auth]
+                      #swagger.parameters['obj'] = {
+                          in: 'body',
+                          required: true,
+                          scheme: {$ref: '#/definition/LoginModel'}
+                      }
+                  */
                 _a.sent();
                 return [2 /*return*/];
         }
     });
 }); });
-routes.post("/register", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+routes.post("/register", (0, user_validator_1.validationRules)(), user_validator_1.validate, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, auth_controller_1.register)(req.body, "user", res)];
+            case 0: 
+            /*  #swagger.tags = ['Auth']
+               #swagger.parameters['obj'] = {
+                   in: 'body',
+                   required: true,
+                   schema: { $ref: "#/definitions/RegisterModel" }
+           } */
+            return [4 /*yield*/, (0, auth_controller_1.register)(req.body, "user", res)];
             case 1:
+                /*  #swagger.tags = ['Auth']
+                   #swagger.parameters['obj'] = {
+                       in: 'body',
+                       required: true,
+                       schema: { $ref: "#/definitions/RegisterModel" }
+               } */
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -66,8 +98,21 @@ routes.post("/register", function (req, res) { return __awaiter(void 0, void 0, 
 routes.post("/verify", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, auth_controller_1.verify)(req.body, res)];
+            case 0: 
+            /*  #swagger.tags = ['Auth']
+               #swagger.parameters['obj'] = {
+                   in: 'body',
+                   required: true,
+                   schema: { $ref: "#/definitions/VerifyEmailModel" }
+           } */
+            return [4 /*yield*/, (0, auth_controller_1.verify)(req.body, res)];
             case 1:
+                /*  #swagger.tags = ['Auth']
+                   #swagger.parameters['obj'] = {
+                       in: 'body',
+                       required: true,
+                       schema: { $ref: "#/definitions/VerifyEmailModel" }
+               } */
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -76,8 +121,21 @@ routes.post("/verify", function (req, res) { return __awaiter(void 0, void 0, vo
 routes.post("/forgotPassword", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, auth_controller_1.forgotPassword)(req.body, res)];
+            case 0: 
+            /*  #swagger.tags = ['Auth']
+                #swagger.parameters['obj'] = {
+                    in: 'body',
+                    required: true,
+                    schema: { $ref: "#/definitions/ForgotPassWordModel" }
+            } */
+            return [4 /*yield*/, (0, auth_controller_1.forgotPassword)(req.body, res)];
             case 1:
+                /*  #swagger.tags = ['Auth']
+                    #swagger.parameters['obj'] = {
+                        in: 'body',
+                        required: true,
+                        schema: { $ref: "#/definitions/ForgotPassWordModel" }
+                } */
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -86,8 +144,21 @@ routes.post("/forgotPassword", function (req, res) { return __awaiter(void 0, vo
 routes.post("/resetPassword", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, auth_controller_1.resetPassword)(req.body, res)];
+            case 0: 
+            /*  #swagger.tags = ['Auth']
+                #swagger.parameters['obj'] = {
+                    in: 'body',
+                    required: true,
+                    schema: { $ref: "#/definitions/ResetPasswordModel" }
+            } */
+            return [4 /*yield*/, (0, auth_controller_1.resetPassword)(req.body, res)];
             case 1:
+                /*  #swagger.tags = ['Auth']
+                    #swagger.parameters['obj'] = {
+                        in: 'body',
+                        required: true,
+                        schema: { $ref: "#/definitions/ResetPasswordModel" }
+                } */
                 _a.sent();
                 return [2 /*return*/];
         }
@@ -96,8 +167,27 @@ routes.post("/resetPassword", function (req, res) { return __awaiter(void 0, voi
 routes.post("/changePassword", auth_middleware_1.ensureAuthenticated, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, auth_controller_1.changePassword)(req.body, res)];
+            case 0: 
+            /*  #swagger.tags = ['Auth']
+                #swagger.security = [{
+                "Authorization": []
+                }]
+                #swagger.parameters['obj'] = {
+                    in: 'body',
+                    required: true,
+                    schema: { $ref: "#/definitions/ChangePasswordModel" }
+            } */
+            return [4 /*yield*/, (0, auth_controller_1.changePassword)(req.body, res)];
             case 1:
+                /*  #swagger.tags = ['Auth']
+                    #swagger.security = [{
+                    "Authorization": []
+                    }]
+                    #swagger.parameters['obj'] = {
+                        in: 'body',
+                        required: true,
+                        schema: { $ref: "#/definitions/ChangePasswordModel" }
+                } */
                 _a.sent();
                 return [2 /*return*/];
         }

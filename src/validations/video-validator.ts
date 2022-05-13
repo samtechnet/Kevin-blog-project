@@ -22,8 +22,8 @@ const validationRules = (req: Request) => {
 const validate = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-        return next;
+    if (errors.isEmpty()) {
+        return next();
     };
 
     const resultErrors = [];

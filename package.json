@@ -10,7 +10,7 @@
     "build": "npx tsc",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "tsc": "tsc",
-    "gitty": "bash gitfile.sh $1 ",
+    "gitty": "bash gitfile.sh developed the email-templates,swagger documentation and bash scripts ",
     "start-gendoc": "node ./swagger.js"
   },
   "keywords": [],
